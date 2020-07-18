@@ -4,6 +4,10 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * @author Murali
+ *
+ */
 public class NotificationSender {
 
 	@NotBlank

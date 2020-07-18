@@ -7,14 +7,18 @@ import org.springframework.stereotype.Service;
 import com.springboot.rest.api.NotificationSender;
 import com.springboot.rest.api.PayloadMessageSender;
 
+/**
+ * @author Murali
+ *
+ */
 @Service
 public class PayloadNotificationService {
 	
 	private final PayloadMessageSender payloadMessageSender;
 	
 	@Autowired
-	public PayloadNotificationService(@Qualifier("twilio") PayloadMessageSender ppayloadMessageSender) {
-		payloadMessageSender = ppayloadMessageSender;
+	public PayloadNotificationService(@Qualifier("twilio") PayloadMessageSender messageSender) {
+		payloadMessageSender = messageSender;
 	}
 	
 	public void sendNotification(NotificationSender notificationSender) {

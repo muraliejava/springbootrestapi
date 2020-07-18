@@ -3,6 +3,10 @@ package com.springboot.rest.api;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author Murali
+ *
+ */
 @Configuration
 @ConfigurationProperties("twilio")
 public class PayloadMessageConfiguration {
