@@ -1,21 +1,20 @@
 package com.springboot.rest.controller;
 
-import java.net.URI;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.springboot.rest.api.NotificationSender;
 import com.springboot.rest.dao.UserDAO;
-import com.springboot.rest.model.User;
 import com.springboot.rest.model.Users;
+import com.springboot.rest.service.PayloadNotificationService;
 
 /**
  * @author Murali
@@ -27,6 +26,12 @@ public class UserController {
 	@Autowired
 	private UserDAO userDao;
 
+	private final PayloadNotificationService payloadNotificationService;
+
+	public UserController(PayloadNotificationService service) {
+		this.payloadNotificationService = service;
+	}
+
 	@RequestMapping(value = "/users", method = RequestMethod.GET, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseStatus(HttpStatus.OK)
@@ -34,17 +39,8 @@ public class UserController {
 		return userDao.getAllUsers();
 	}
 
-	@RequestMapping(value = "/addUsers", method = RequestMethod.POST, consumes = {
-			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Object> addUser(@RequestBody User user) {
-		Integer id = userDao.getAllUsers().getUserList().size() + 1;
-		user.setUser_id(id);
-		userDao.addUser(user);
-
-		// Create resource location
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{user_id}")
-				.buildAndExpand(user.getUser_id()).toUri();
-		return ResponseEntity.created(location).build();
-
+	@RequestMapping(value = "/sendNotification", method = RequestMethod.POST)
+	public void sendNotification(@Valid @RequestBody NotificationSender notificationSender) {
+		payloadNotificationService.sendNotification(notificationSender);
 	}
 }
